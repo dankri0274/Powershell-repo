@@ -1,3 +1,8 @@
+#Oppdatert av Daniel / 28.05.2021
+#USB-pinne for innmelding i domene narvik.kommune.no
+#Før du starter dette programmet, oppdater Windows 10 helt til den ikke laster ned oppdateringer mer
+#Kjør filen i ettertid som Administrator
+
 write-host "Velg:"
 write-host "1. PC-Navn, NerFx3, SMB"
 write-host "2. Legg til i domene"
@@ -5,16 +10,7 @@ write-host "3. Eier, grupper, TV, dw"
 
 $valg = read-host -prompt "Velg ett av alternativene (1 / 2 / 3)"
 
-$eier = ""
 $InNarkom = "Y" #Skal PC-en registreres i domenet narvik.kommune.no ?
-
-#___Underenheter av Narvik Kommune___
-
-$NarvikVann = "N"
-$Areal = "N"
-$Okonomi = "N"
-
-#______
 
 $testit3 = "Y"
 $SettPwdIT = "N"
@@ -45,6 +41,10 @@ if ($valg -eq "2") {
 }
 
 if ($valg -eq "3") {
+	$eier = read-input -prompt "Eier"
+	$NarvikVann = read-host -prompt "Narvik Vann? Hvis NEI, trykk ENTER, Y = Ja"
+	$Areal = read-host -prompt "Areal? Hvis NEI, trykk ENTER, Y = Ja"
+	$Okonomi = read-host -prompt "Okonomi? Hvis NEI, trykk ENTER, Y = Ja"
 	if ($InNarkom -eq "Y") {
 		if ($Narvikvann -eq "Y") {
 			net localgroup administratorer grpNarvikVann /add
@@ -77,15 +77,15 @@ if ($valg -eq "3") {
 			}
 		}
 	}
-	copy-item C:\Download\TeamViewer.exe C:\Users\Public\Desktop
+	copy-item c:\download\TeamViewer.exe C:\Users\Public\Desktop
 
-	$apwd = read-host -prompt "Oppgi passordet til lokal administrator"
+	$apwd = read-host -prompt "Oppgi passordet til lokal administrator" -AsSecureString
 	$nyttapwd = [Runtime.InteropServices.Marshal]::PtrToStringAuto([runtime.Interop.Marshal]::SecureStringToBSR($apwd))
 
 	net user administrator $nyttapwd
 	remove-variable $nyttapwd
 	remove-variable $apwd
-	net user administrator /activ:yes
+	net user administrator /active:yes
 
 	if ($SettPwdIT = "Y" -eq "Y") {
 		$ITpwd = read-host -prompt "Oppgi passordet til lokal IT-konto" -AsSecureString
@@ -98,9 +98,9 @@ if ($valg -eq "3") {
 		}
 	}
 	if ($InNarkom -eq "Y") {
-		net user $Bruker /activ:no
+		net user $Bruker /active:no
 		if ($DoDebug -eq "Y") {
-			write-host "Konto IT r deaktivert"
+			write-host "Konto IT er deaktivert"
 		}
 	}
 	if ($DoDebug -eq "Y") {
