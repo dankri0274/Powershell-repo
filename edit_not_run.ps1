@@ -42,9 +42,9 @@ if ($valg -eq "2") {
 
 if ($valg -eq "3") {
 	$eier = read-input -prompt "Eier"
-	$NarvikVann = read-host -prompt "Narvik Vann? Hvis NEI, trykk ENTER, Y = Ja"
-	$Areal = read-host -prompt "Areal? Hvis NEI, trykk ENTER, Y = Ja"
-	$Okonomi = read-host -prompt "Okonomi? Hvis NEI, trykk ENTER, Y = Ja"
+	$NarvikVann = read-input -prompt "Narvik Vann? Nei = ENTER, Y = Ja"
+	$Areal = read-input -prompt "Areal? Nei = ENTER, Y = Ja"
+	$Okonomi = read-input -prompt "Okonomi? Nei = ENTER, Y = Ja"
 	if ($InNarkom -eq "Y") {
 		if ($Narvikvann -eq "Y") {
 			net localgroup administratorer grpNarvikVann /add
@@ -106,6 +106,9 @@ if ($valg -eq "3") {
 	if ($DoDebug -eq "Y") {
 		$reply = read-host "Trykk en tast for reboot"
 	}
+	
+	[System.Windows.MessageBox]::Show("PC is registered in domain", "Domain registration completed", "Information")
+
 	pause
 	invoke-command -command {shutdown -l}
 }
