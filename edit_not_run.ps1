@@ -91,7 +91,7 @@ if ($valg -eq "3") {
 	net user administrator /active:yes
 
 	if ($SettPwdIT = "Y" -eq "Y") {
-		write-host "INFO:	Lokal IT konto er kontoen som PC-en ble satt opp med!"
+		write-host "INFO:	Lokal IT konto er kontoen som PC-en ble satt opp med, CASE SENSITIVE!"
 		$ITpwd = read-host "Oppgi passordet til lokal IT-konto" -AsSecureString
 		$NyttITPwd = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($apwd))
 		remove-variable $ITpwd
