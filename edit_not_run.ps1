@@ -1,14 +1,14 @@
-#Oppdatert av Daniel / 28.05.2021
+#Oppdatert av Daniel / 03.06.2021
 #USB-pinne for innmelding i domene narvik.kommune.no
-#Før du starter dette programmet, oppdater Windows 10 helt til den ikke laster ned oppdateringer mer
-#Kjør filen i ettertid som Administrator
+#For du starter dette programmet, oppdater Windows 10 helt til den ikke laster ned oppdateringer mer
+#Kjor filen i ettertid som Administrator
 
 write-host "Velg:"
 write-host "1. PC-Navn, NerFx3, SMB"
 write-host "2. Legg til i domene"
 write-host "3. Eier, grupper, TV, dw"
 
-$valg = read-host -prompt "Velg ett av alternativene (1 / 2 / 3)"
+$valg = read-host "Velg ett av alternativene (1 / 2 / 3)"
 
 $InNarkom = "Y" #Skal PC-en registreres i domenet narvik.kommune.no ?
 
@@ -16,10 +16,9 @@ $testit3 = "Y"
 $SettPwdIT = "N"
 $DoDebug = "N"
 $reply = ""
-$Bruker = "it"
 
 if ($valg -eq "1") {
-	$pcname = read-host -prompt "Hva skal PC-en hete" #Navn på PC. >5 tegn
+	$pcname = read-host "Hva skal PC-en hete" #Navn på PC. >5 tegn
 	rename-computer $pcname
 	DISM /online /enable-feature /featurename:NetFx3 /NoRestart
 	DISM /online /enable-feature /featurename:SMB1Protocol-client /NoRestart
@@ -33,7 +32,7 @@ if ($valg -eq "1") {
 
 if ($valg -eq "2") {
 	if ($InNarkom -eq "Y") {
-		$adminuser = read-host -prompt "Enter adminbruker"
+		$adminuser = read-host "Enter adminbruker"
 		$addcomp = add-computer -domainname "narvik.kommune.no" -credential $adminuser
 		pause
 		restart-computer
@@ -41,10 +40,13 @@ if ($valg -eq "2") {
 }
 
 if ($valg -eq "3") {
-	$eier = read-input -prompt "Eier"
-	$NarvikVann = read-input -prompt "Narvik Vann? Nei = ENTER, Y = Ja"
-	$Areal = read-input -prompt "Areal? Nei = ENTER, Y = Ja"
-	$Okonomi = read-input -prompt "Okonomi? Nei = ENTER, Y = Ja"
+	$Bruker = read-host "Skriv inn navnet på brukeren PC-en ble satt opp med"
+	$eier = read-host "Owner username (check if you have written the correct username)"
+
+	$NarvikVann = read-host "Narvik Vann? Nei = ENTER, Y = Ja"
+	$Areal = read-host "Areal? Nei = ENTER, Y = Ja"
+	$Okonomi = read-host "Okonomi? Nei = ENTER, Y = Ja"
+
 	if ($InNarkom -eq "Y") {
 		if ($Narvikvann -eq "Y") {
 			net localgroup administratorer grpNarvikVann /add
@@ -79,8 +81,9 @@ if ($valg -eq "3") {
 	}
 	copy-item c:\download\TeamViewer.exe C:\Users\Public\Desktop
 
+	write-host "INFO:	Administratorkonto er administrator for hele systemet"
 	$apwd = read-host -prompt "Oppgi passordet til lokal administrator" -AsSecureString
-	$nyttapwd = [Runtime.InteropServices.Marshal]::PtrToStringAuto([runtime.Interop.Marshal]::SecureStringToBSR($apwd))
+	$nyttapwd = [Runtime.InteropServices.Marshal]::PtrToStringAuto([runtime.Interop.Marshal]::SecureStringToBSTR($apwd))
 
 	net user administrator $nyttapwd
 	remove-variable $nyttapwd
@@ -88,7 +91,8 @@ if ($valg -eq "3") {
 	net user administrator /active:yes
 
 	if ($SettPwdIT = "Y" -eq "Y") {
-		$ITpwd = read-host -prompt "Oppgi passordet til lokal IT-konto" -AsSecureString
+		write-host "INFO:	Lokal IT konto er kontoen som PC-en ble satt opp med!"
+		$ITpwd = read-host "Oppgi passordet til lokal IT-konto" -AsSecureString
 		$NyttITPwd = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($apwd))
 		remove-variable $ITpwd
 		remove-variable $NyttITPwd
@@ -103,12 +107,14 @@ if ($valg -eq "3") {
 			write-host "Konto IT er deaktivert"
 		}
 	}
+
+	[System.Windows.MessageBox]::Show("PC is registered in domain", "Domain registration completed", "Information")
+
 	if ($DoDebug -eq "Y") {
 		$reply = read-host "Trykk en tast for reboot"
 	}
 	
-	[System.Windows.MessageBox]::Show("PC is registered in domain", "Domain registration completed", "Information")
-
 	pause
-	invoke-command -command {shutdown -l}
+	#invoke-command -command {shutdown -l}
+	logoff
 }
