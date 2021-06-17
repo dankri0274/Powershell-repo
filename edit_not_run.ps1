@@ -3,6 +3,8 @@
 #For du starter dette programmet, oppdater Windows 10 helt til den ikke laster ned oppdateringer mer
 #Kjor filen i ettertid som Administrator
 
+add-type -AssemblyName System.Windows.Forms
+
 write-host "Velg:"
 write-host "1. PC-Navn, NerFx3, SMB"
 write-host "2. Legg til i domene"
@@ -10,7 +12,7 @@ write-host "3. Eier, grupper, TV, dw"
 
 $valg = read-host "Velg ett av alternativene (1 / 2 / 3)"
 
-$InNarkom = "Y" #Skal PC-en registreres i domenet narvik.kommune.no ?
+$InNarkom = "Y" #Skal PC-en registreres i domenet narvik.kommune.no?
 
 $testit3 = "Y"
 $SettPwdIT = "N"
@@ -21,10 +23,10 @@ if ($valg -eq "1") {
 	$pcname = read-host "Hva skal PC-en hete" #Navn på PC. >5 tegn
 	rename-computer $pcname
 	DISM /online /enable-feature /featurename:NetFx3 /NoRestart
-	DISM /online /enable-feature /featurename:SMB1Protocol-client /NoRestart
-	DISM /online /enable-feature /featurename:SMB1Protocol-client /NoRestart
-	DISM /online /disable-feature /featurename:SMB1Protocol-server /NoRestart
-	DISM /online /disable-feature /featurename:SMB1Protocol-deprecation /NoRestart
+	dism /online /enable-feature /all /featurename:SMB1Protocol /NoRestart
+	dism /online /enable-feature /featurename:SMB1Protocol-client /NoRestart
+	dism /online /disable-feature /featurename:SMB1Protocol-server /NoRestart
+	dism /online /disable-feature /featurename:SMB1Protocol-deprecation /NoRestart
 
 	pause
 	restart-computer
@@ -40,7 +42,7 @@ if ($valg -eq "2") {
 }
 
 if ($valg -eq "3") {
-	$Bruker = read-host "Skriv inn navnet på brukeren PC-en ble satt opp med"
+	$Bruker = read-host "Skriv inn navnet på brukeren PC-en ble satt opp med, CASE SENSITIVE!"
 	$eier = read-host "Owner username (check if you have written the correct username)"
 
 	$NarvikVann = read-host "Narvik Vann? Nei = ENTER, Y = Ja"
@@ -91,7 +93,7 @@ if ($valg -eq "3") {
 	net user administrator /active:yes
 
 	if ($SettPwdIT = "Y" -eq "Y") {
-		write-host "INFO:	Lokal IT konto er kontoen som PC-en ble satt opp med, CASE SENSITIVE!"
+		write-host "INFO:	Lokal IT konto er kontoen som PC-en ble satt opp med!"
 		$ITpwd = read-host "Oppgi passordet til lokal IT-konto" -AsSecureString
 		$NyttITPwd = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($apwd))
 		remove-variable $ITpwd
