@@ -1,7 +1,7 @@
 # USB-pinne for innmelding i domene narvik.kommune.no
 # Før du starter dette programmet, oppdater Windows 10 helt til den ikke laster ned oppdateringer mer
 # Kjør filen i ettertid som Administrator
-# Med navnekontroll f.eks "vegpark-XXXX" <-- må være slik
+# Med navnekontroll f.eks "vegpark-XXXX" eller "IT-navn-XXXX" <-- må være slik, X = tall 0-9
 
 write-host "IT-Avdelingens domeneinnmelding for PC-er, m/navnekontroll`n" -foregroundcolor green
 
