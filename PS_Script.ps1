@@ -164,9 +164,9 @@ Write-Host " Installerer programmer... " -f Black -b Green
 
 C:\Programmer\AcrobatReader.exe # Installer Adobe Acrobat Reader
 Pause
-C:\Programmer\TrendAntivirus.msi # Installer Trend Micro Antivirus
+C:\Programmer\TrendAntivirus.exe # Installer Trend Micro Antivirus
 Pause
-C:\Programmer\DameWare-Installer.msi # Installer DameWare
+C:\Programmer\DameWare-Installer.exe # Installer DameWare
 Pause
 C:\Programmer\Google-Chrome-Installer.exe # Installer Google Chrome
 
