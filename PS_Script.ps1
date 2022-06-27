@@ -156,14 +156,21 @@ Remove-Item -LiteralPath C:\Download -Force -Recurse # Slett setup-filene
 Remove-Item C:\Users\*\Desktop\*Run-As-Admin-3X_SHORTCUT.lnk -Force # Slett snarvei på skrivebordet
 Remove-Item C:\Users\*\Desktop\*PS_Script_SHORTCUT.lnk -Force # Slett snarvei på skrivebordet
 
+Pause
+
 cls
 
 Write-Host " Installerer programmer... " -f Black -b Green
 
 C:\Programmer\AcrobatReader.exe # Installer Adobe Acrobat Reader
+Pause
 C:\Programmer\TrendAntivirus.exe # Installer Trend Micro Antivirus
+Pause
 C:\Programmer\DameWare-Installer.exe # Installer DameWare
+Pause
 C:\Programmer\Google-Chrome-Installer.exe # Installer Google Chrome
+
+Pause
 
 cls
 
